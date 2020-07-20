@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns="http://xmlns.jcp.org/xml/ns/javaee"  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee  http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"  id="WebApp_ID" version="3.1">
+  <display-name>01-SSM-Project</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <!-- 将spring加入web中 -->
+  <!-- 指定ioc容器的位置 -->
+  <!-- 指定ioc容器的位置 -->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:ApplicationContext.xml</param-value>  <!-- 加载多个配置文件用,分割配置文件地址，也可在启动器中引入其他配置文件 -->
+  </context-param>
+  <listener>
+    <!-- 配置spring-web.jar提供的监听器，此监听器可以在服务器启动时初始化ioc容器
+         初始化ioc容器（applicationContext.xml）时，需要告诉监听器此容器的位置 -->
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+
+  <servlet>
+    <servlet-name>springDispacherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <!-- springmvc配置文件所在的位置  -->
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:SpringMVC.xml</param-value>
+    </init-param>
+    <!-- 容器启动时首先加载这个servlet -->
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>springDispacherServlet</servlet-name>
+    <!-- 表示拦截所有请求，除了*.jsp文件    -->
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+</web-app>

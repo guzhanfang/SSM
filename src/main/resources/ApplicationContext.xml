@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+    <!-- 开启注解扫描 -->
+    <context:component-scan  base-package="com.gzf.service"></context:component-scan>
+    <!-- 引入配置文件 -->
+    <bean   class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <property name="locations">
+            <array>
+                <value>classpath:db.properties</value>
+            </array>
+        </property>
+    </bean>
+    <bean id="dataSource"   class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="url"   value="${url}"></property>
+        <property name="driverClassName"   value="${driver}"></property>
+        <property name="username"   value="${username}"></property>
+        <property name="password"   value="${password}"></property>
+    </bean>
+
+    <bean id = "sqlSessionFactory"    class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource"    ref="dataSource"></property>
+        <!-- 引入mapper.xml配置文件 -->
+        <!-- 当mybatis的xml文件和mapper接口不在相同包下时，需要用mapperLocations属性指定xml文件的路径。
+               *是个通配符，代表所有的文件，**代表所有目录下  -->
+        <property name="mapperLocations"    value="classpath:mapper/*.xml"></property>
+        <!-- 引入mybatis的配置文件 -->
+        <property name="configLocation"    value="classpath:mybatis.xml"></property>
+
+    </bean>
+    <!-- 以上是在spring中配置mybatis -->
+    <!-- 以下将mybatis交给spring管理，可以产生对应的mapper文件的动态代理对象的bean，bean的默认值为抽象类的首字母小写的全名， -->
+    <bean    class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName"    value="sqlSessionFactory"></property>
+        <property name="basePackage"    value="com.gzf.mapper"></property>
+    </bean>
+</beans>
